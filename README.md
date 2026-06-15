@@ -1,0 +1,2 @@
+# alt_generate_zh_name
+一个能自动生成学生个人基础信息的包
