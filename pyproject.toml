@@ -30,9 +30,11 @@ dependencies = [
     "pandas>=2.0",
 ]
 
+# 声明开发/测试所需的额外依赖
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=6.0",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -40,3 +42,4 @@ packages = ["src/alt_generate_zh_name"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--cov=alt_generate_zh_name --cov-report=term-missing"

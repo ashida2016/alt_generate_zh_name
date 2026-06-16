@@ -33,12 +33,9 @@ def _parse_date(value: str | datetime.date, *, as_end: bool = False) -> datetime
     - ``"2005-03-15"``  → 2005-03-15
     - ``datetime.date`` → 直接返回
 
-    Parameters
-    ----------
-    value:
-        日期字符串或 ``datetime.date`` 对象。
-    as_end:
-        若为 ``True``，对于年份/年月格式取该时段最后一天。
+    Args:
+        value: 日期字符串或 ``datetime.date`` 对象。
+        as_end: 若为 ``True``，对于年份/年月格式取该时段最后一天。
     """
     if isinstance(value, datetime.date):
         return value
@@ -91,38 +88,33 @@ def generate(
 ) -> pd.DataFrame:
     """随机生成 *n* 个学生的基础信息。
 
-    Parameters
-    ----------
-    n:
-        生成学生数量，默认 ``1``。
-    surname:
-        指定姓氏（如 ``"王"``）。为 ``None`` 时按中国人口姓氏占比随机选取。
-    name_length:
-        指定名字字数：``1`` 为单名，``2`` 为双名。
-        为 ``None`` 时随机选取 1 或 2。
-    birth_start:
-        生日起始范围（含），支持 ``"2000"``、``"2000-09"``、``"2000-09-01"``
-        等格式，或 ``datetime.date`` 对象。默认 ``2000-01-01``。
-    birth_end:
-        生日结束范围（含），格式同上。默认 ``2010-12-31``。
-    seed:
-        随机种子，用于可复现结果。
+    Args:
+        n: 生成学生数量，默认 ``1``。
+        surname: 指定姓氏（如 ``"王"``）。为 ``None`` 时按中国人口姓氏占比随机选取。
+        name_length: 指定名字字数：``1`` 为单名，``2`` 为双名。
+            为 ``None`` 时随机选取 1 或 2。
+        birth_start: 生日起始范围（含），支持 ``"2000"``、``"2000-09"``、
+            ``"2000-09-01"`` 等格式，或 ``datetime.date`` 对象。默认
+            ``2000-01-01``。
+        birth_end: 生日结束范围（含），格式同上。默认 ``2010-12-31``。
+        seed: 随机种子，用于可复现结果。
 
-    Returns
-    -------
-    pd.DataFrame
-        列：``["姓名", "性别", "生日"]``
+    Returns:
+        ``pd.DataFrame``，列：``["姓名", "性别", "生日"]``
 
         - **姓名** (*str*) — 如 ``"王明伟"``
         - **性别** (*str*) — ``"男"`` 或 ``"女"``
         - **生日** (*datetime.date*) — 如 ``datetime.date(2005, 3, 15)``
 
-    Examples
-    --------
-    >>> from alt_generate_zh_name import generate
-    >>> df = generate(3, seed=42)
-    >>> df.columns.tolist()
-    ['姓名', '性别', '生日']
+    Raises:
+        ValueError: 如果 ``n < 1``，``name_length`` 不是 1 或 2，
+            或生日起始日期晚于结束日期。
+
+    Examples:
+        >>> from alt_generate_zh_name import generate
+        >>> df = generate(3, seed=42)
+        >>> df.columns.tolist()
+        ['姓名', '性别', '生日']
     """
     if n < 1:
         raise ValueError(f"n 必须 ≥ 1，收到 {n}")
