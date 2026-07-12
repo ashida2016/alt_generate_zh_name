@@ -10,5 +10,5 @@
 
 from alt_generate_zh_name.generator import generate
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __all__ = ["generate"]

@@ -35,10 +35,10 @@ class TestBasicGeneration:
         assert len(df) == 100
 
     def test_name_length_default(self) -> None:
-        """默认名字长度为 2-3 个字符（姓1 + 名1-2）。"""
+        """默认名字长度为 2-4 个字符（姓1~2 + 名1-2）。"""
         df = generate(50, seed=2)
         for name in df["姓名"]:
-            assert 2 <= len(name) <= 3
+            assert 2 <= len(name) <= 4
 
     def test_gender_distribution(self) -> None:
         """大样本下性别应该大致均匀。"""
@@ -67,12 +67,12 @@ class TestNameLength:
     """指定名字字数测试。"""
 
     def test_single_char_name(self) -> None:
-        df = generate(20, name_length=1, seed=20)
+        df = generate(20, surname="王", name_length=1, seed=20)
         for name in df["姓名"]:
             assert len(name) == 2  # 姓1 + 名1
 
     def test_double_char_name(self) -> None:
-        df = generate(20, name_length=2, seed=21)
+        df = generate(20, surname="王", name_length=2, seed=21)
         for name in df["姓名"]:
             assert len(name) == 3  # 姓1 + 名2
 
@@ -137,10 +137,20 @@ class TestSurnameDistribution:
 
     def test_top_surnames_appear_frequently(self) -> None:
         """大样本下，李/王/张应出现在最高频的几个姓中。"""
+        from alt_generate_zh_name.data.surnames import SURNAMES
+
+        surname_set = {s for s, _ in SURNAMES}
         df = generate(5000, seed=50)
-        # 提取姓氏（每个名字的第一个字）
-        surnames = [name[0] for name in df["姓名"]]
-        counter = Counter(surnames)
+
+        # 提取姓氏：优先匹配两字复姓，再匹配单字姓
+        extracted: list[str] = []
+        for name in df["姓名"]:
+            if len(name) >= 3 and name[:2] in surname_set:
+                extracted.append(name[:2])
+            else:
+                extracted.append(name[0])
+
+        counter = Counter(extracted)
         top_10 = {s for s, _ in counter.most_common(10)}
         # 李、王、张至少应出现在前 10
         assert "李" in top_10
