@@ -11,10 +11,12 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../src'))
 
+import alt_generate_zh_name  # noqa: E402
+
 project = 'alt_generate_zh_name'
 copyright = '2026, Ashida.Shi'
 author = 'Ashida.Shi'
-release = '0.1.0'
+release = alt_generate_zh_name.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -25,6 +27,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',  # 可以在文档中直接查看源码链接
     'sphinx.ext.napoleon',  # 支持更美观的 docstring 风格
+    'sphinx_copybutton',    # 代码块一键复制按钮
 ]
 
 templates_path = ['_templates']
@@ -39,3 +42,4 @@ language = 'zh_CN'
 # html_theme = 'alabaster'
 html_theme = 'furo'
 html_static_path = ['_static']
+

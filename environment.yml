@@ -1,0 +1,9 @@
+name: alt_generate_zh_name
+channels:
+  - defaults
+dependencies:
+  - python>=3.10
+  - pandas>=2.0
+  - pip
+  - pip:
+      - -e .
