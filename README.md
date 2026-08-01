@@ -22,11 +22,6 @@ pip install .
 pip install -e ".[dev]"
 ```
 
-## 帮助文档
-
-[ver0.2.3](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.2.3/)  
-[ver0.2.2](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.2.2/)  
-
 ## 🚀 快速上手
 
 ```python
