@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "alt_generate_zh_name"
-version = "0.2.2"
-description = "一个能自动生成中国学生个人基础信息（姓名、性别、生日）的 Python 包"
+version = "0.2.3"
+description = "一个能自动生成中国学生个人基础信息（name、gender、birthday）的 Python 包"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"

@@ -100,11 +100,11 @@ def generate(
         seed: 随机种子，用于可复现结果。
 
     Returns:
-        ``pd.DataFrame``，列：``["姓名", "性别", "生日"]``
+        ``pd.DataFrame``，列：``["name", "gender", "birthday"]``
 
-        - **姓名** (*str*) — 如 ``"王明伟"``
-        - **性别** (*str*) — ``"男"`` 或 ``"女"``
-        - **生日** (*datetime.date*) — 如 ``datetime.date(2005, 3, 15)``
+        - **name** (*str*) — 如 ``"王明伟"``
+        - **gender** (*str*) — ``"M"`` 或 ``"F"``
+        - **birthday** (*datetime.date*) — 如 ``datetime.date(2005, 3, 15)``
 
     Raises:
         ValueError: 如果 ``n < 1``，``name_length`` 不是 1 或 2，
@@ -114,7 +114,7 @@ def generate(
         >>> from alt_generate_zh_name import generate
         >>> df = generate(3, seed=42)
         >>> df.columns.tolist()
-        ['姓名', '性别', '生日']
+        ['name', 'gender', 'birthday']
     """
     if n < 1:
         raise ValueError(f"n 必须 ≥ 1，收到 {n}")
@@ -140,7 +140,7 @@ def generate(
 
     for _ in range(n):
         # 性别
-        gender: str = rng.choice(["男", "女"])
+        gender: str = rng.choice(["M", "F"])
 
         # 姓氏
         if surname is not None:
@@ -152,7 +152,7 @@ def generate(
         length = name_length if name_length is not None else rng.choice([1, 2])
 
         # 名字汉字
-        pool = _MALE_POOL if gender == "男" else _FEMALE_POOL
+        pool = _MALE_POOL if gender == "M" else _FEMALE_POOL
         given_chars = rng.choices(pool, k=length)
 
         # 姓名
@@ -162,9 +162,9 @@ def generate(
         birthday = _random_birthday(rng, start, end)
 
         records.append({
-            "姓名": full_name,
-            "性别": gender,
-            "生日": birthday,
+            "name": full_name,
+            "gender": gender,
+            "birthday": birthday,
         })
 
     return pd.DataFrame(records)

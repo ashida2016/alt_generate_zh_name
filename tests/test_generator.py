@@ -21,14 +21,14 @@ class TestBasicGeneration:
 
     def test_column_names(self) -> None:
         df = generate(seed=0)
-        assert df.columns.tolist() == ["姓名", "性别", "生日"]
+        assert df.columns.tolist() == ["name", "gender", "birthday"]
 
     def test_column_types(self) -> None:
         df = generate(seed=0)
         row = df.iloc[0]
-        assert isinstance(row["姓名"], str)
-        assert row["性别"] in ("男", "女")
-        assert isinstance(row["生日"], datetime.date)
+        assert isinstance(row["name"], str)
+        assert row["gender"] in ("M", "F")
+        assert isinstance(row["birthday"], datetime.date)
 
     def test_generate_multiple(self) -> None:
         df = generate(100, seed=1)
@@ -37,16 +37,16 @@ class TestBasicGeneration:
     def test_name_length_default(self) -> None:
         """默认名字长度为 2-4 个字符（姓1~2 + 名1-2）。"""
         df = generate(50, seed=2)
-        for name in df["姓名"]:
+        for name in df["name"]:
             assert 2 <= len(name) <= 4
 
     def test_gender_distribution(self) -> None:
         """大样本下性别应该大致均匀。"""
         df = generate(1000, seed=3)
-        counts = df["性别"].value_counts()
+        counts = df["gender"].value_counts()
         # 允许一定偏差：每种性别至少 400
-        assert counts["男"] >= 400
-        assert counts["女"] >= 400
+        assert counts["M"] >= 400
+        assert counts["F"] >= 400
 
 
 class TestSurnameOption:
@@ -54,12 +54,12 @@ class TestSurnameOption:
 
     def test_fixed_surname(self) -> None:
         df = generate(20, surname="王", seed=10)
-        for name in df["姓名"]:
+        for name in df["name"]:
             assert name.startswith("王")
 
     def test_fixed_surname_zhao(self) -> None:
         df = generate(10, surname="赵", seed=11)
-        for name in df["姓名"]:
+        for name in df["name"]:
             assert name.startswith("赵")
 
 
@@ -68,12 +68,12 @@ class TestNameLength:
 
     def test_single_char_name(self) -> None:
         df = generate(20, surname="王", name_length=1, seed=20)
-        for name in df["姓名"]:
+        for name in df["name"]:
             assert len(name) == 2  # 姓1 + 名1
 
     def test_double_char_name(self) -> None:
         df = generate(20, surname="王", name_length=2, seed=21)
-        for name in df["姓名"]:
+        for name in df["name"]:
             assert len(name) == 3  # 姓1 + 名2
 
     def test_invalid_name_length(self) -> None:
@@ -86,12 +86,12 @@ class TestBirthRange:
 
     def test_year_only(self) -> None:
         df = generate(50, birth_start="2005", birth_end="2005", seed=30)
-        for birthday in df["生日"]:
+        for birthday in df["birthday"]:
             assert birthday.year == 2005
 
     def test_year_month(self) -> None:
         df = generate(50, birth_start="2006-03", birth_end="2006-03", seed=31)
-        for birthday in df["生日"]:
+        for birthday in df["birthday"]:
             assert birthday.year == 2006
             assert birthday.month == 3
 
@@ -99,7 +99,7 @@ class TestBirthRange:
         start = datetime.date(2007, 6, 1)
         end = datetime.date(2007, 6, 30)
         df = generate(50, birth_start=start, birth_end=end, seed=32)
-        for birthday in df["生日"]:
+        for birthday in df["birthday"]:
             assert start <= birthday <= end
 
     def test_mixed_formats(self) -> None:
@@ -109,7 +109,7 @@ class TestBirthRange:
             birth_end=datetime.date(2005, 6, 15),
             seed=33,
         )
-        for birthday in df["生日"]:
+        for birthday in df["birthday"]:
             assert datetime.date(2003, 1, 1) <= birthday <= datetime.date(2005, 6, 15)
 
     def test_invalid_range_raises(self) -> None:
@@ -144,7 +144,7 @@ class TestSurnameDistribution:
 
         # 提取姓氏：优先匹配两字复姓，再匹配单字姓
         extracted: list[str] = []
-        for name in df["姓名"]:
+        for name in df["name"]:
             if len(name) >= 3 and name[:2] in surname_set:
                 extracted.append(name[:2])
             else:
@@ -172,5 +172,5 @@ class TestEdgeCases:
     def test_single_day_range(self) -> None:
         target = datetime.date(2005, 6, 15)
         df = generate(10, birth_start="2005-06-15", birth_end="2005-06-15", seed=60)
-        for birthday in df["生日"]:
+        for birthday in df["birthday"]:
             assert birthday == target
