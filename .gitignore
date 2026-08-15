@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Example generated output
+examples/*.csv
+examples/*.xlsx

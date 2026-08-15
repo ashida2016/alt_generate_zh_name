@@ -24,6 +24,7 @@ pip install -e ".[dev]"
 
 ## 帮助文档
 
+[ver0.3.0](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.3.0/)  
 [ver0.2.5](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.2.5/)  
 [ver0.2.2](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.2.2/)  
 

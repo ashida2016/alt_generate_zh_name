@@ -1,0 +1,65 @@
+# alt_generate_zh_name
+
+> A Python package that generates realistic Chinese student personal information (name, gender, birthday).
+
+## Overview
+
+`alt_generate_zh_name` randomly generates Chinese student records as a pandas DataFrame.
+Surnames are weighted by real Chinese population proportions (百家姓).
+Given names are built from 200+ curated characters (positive-meaning hanzi), split by gender.
+
+- Package name: `alt_generate_zh_name`
+- Version: 0.2.5
+- License: Apache-2.0
+- Python: ≥ 3.10
+- Dependency: pandas ≥ 2.0
+
+## Install
+
+```bash
+pip install alt_generate_zh_name        # from local source or PyPI
+pip install -e ".[dev]"                  # editable with test deps
+```
+
+## Quick Start
+
+```python
+from alt_generate_zh_name import generate
+
+df = generate(10)          # 10 random students
+print(df)
+```
+
+## API
+
+The package exposes a single public function:
+
+### generate(n, *, surname, name_length, birth_start, birth_end, seed) → pd.DataFrame
+
+| Parameter    | Type                      | Default       | Description                                        |
+|------------- |---------------------------|---------------|----------------------------------------------------|
+| n            | int                       | 1             | Number of students to generate                     |
+| surname      | str \| None               | None          | Fixed surname; None → weighted random              |
+| name_length  | 1 \| 2 \| None            | None          | 1 = single-char name, 2 = double; None → random    |
+| birth_start  | str \| date \| None       | None          | Start of birthday range (inclusive), default 2000-01-01 |
+| birth_end    | str \| date \| None       | None          | End of birthday range (inclusive), default 2010-12-31   |
+| seed         | int \| None               | None          | Random seed for reproducibility                    |
+
+**Date format**: `"2005"`, `"2005-03"`, `"2005-03-15"`, or `datetime.date`.
+
+**Returns**: DataFrame with columns `["name", "gender", "birthday"]`.
+
+## Project Layout
+
+- `src/alt_generate_zh_name/` — package source
+  - `__init__.py` — re-exports `generate`
+  - `generator.py` — core generation logic
+  - `data/surnames.py` — surname list with population weights
+  - `data/given_names.py` — given-name character pools (male / female / neutral)
+- `tests/` — pytest test suite
+- `examples/` — runnable example scripts
+- `docs/` — Sphinx documentation source
+
+## Links
+
+- [Documentation (v0.2.5)](https://alt-generate-zh-name.readthedocs.io/zh-cn/ver0.2.5/)
