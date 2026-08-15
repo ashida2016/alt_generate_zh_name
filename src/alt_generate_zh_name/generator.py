@@ -36,6 +36,21 @@ def _parse_date(value: str | datetime.date, *, as_end: bool = False) -> datetime
     Args:
         value: 日期字符串或 ``datetime.date`` 对象。
         as_end: 若为 ``True``，对于年份/年月格式取该时段最后一天。
+
+    Examples:
+        >>> _parse_date("2005")
+        datetime.date(2005, 1, 1)
+        >>> _parse_date("2005", as_end=True)
+        datetime.date(2005, 12, 31)
+        >>> _parse_date("2005-03")
+        datetime.date(2005, 3, 1)
+        >>> _parse_date("2005-03", as_end=True)
+        datetime.date(2005, 3, 31)
+        >>> _parse_date("2005-03-15")
+        datetime.date(2005, 3, 15)
+        >>> import datetime
+        >>> _parse_date(datetime.date(2008, 6, 1))
+        datetime.date(2008, 6, 1)
     """
     if isinstance(value, datetime.date):
         return value
@@ -68,7 +83,27 @@ def _random_birthday(
     start: datetime.date,
     end: datetime.date,
 ) -> datetime.date:
-    """在 [start, end] 范围内随机生成一个日期。"""
+    """在 [start, end] 范围内随机生成一个日期。
+
+    Args:
+        rng: 随机数生成器实例。
+        start: 日期范围起始（含）。
+        end: 日期范围结束（含）。
+
+    Returns:
+        在 ``[start, end]`` 内均匀随机选取的 ``datetime.date``。
+
+    Raises:
+        ValueError: 如果 ``start`` 晚于 ``end``。
+
+    Examples:
+        >>> import random, datetime
+        >>> rng = random.Random(0)
+        >>> _random_birthday(rng, datetime.date(2005, 1, 1), datetime.date(2005, 12, 31))
+        datetime.date(2005, 9, 10)
+        >>> _random_birthday(rng, datetime.date(2000, 6, 1), datetime.date(2000, 6, 1))
+        datetime.date(2000, 6, 1)
+    """
     delta_days = (end - start).days
     if delta_days < 0:
         raise ValueError(
@@ -111,10 +146,32 @@ def generate(
             或生日起始日期晚于结束日期。
 
     Examples:
+        生成 3 个学生并查看列名：
+
         >>> from alt_generate_zh_name import generate
         >>> df = generate(3, seed=42)
         >>> df.columns.tolist()
         ['name', 'gender', 'birthday']
+
+        指定姓氏和单名：
+
+        >>> df = generate(2, surname="李", name_length=1, seed=0)
+        >>> all(name.startswith("李") for name in df["name"])
+        True
+        >>> all(len(name) == 2 for name in df["name"])
+        True
+
+        限定出生年份范围：
+
+        >>> import datetime
+        >>> df = generate(5, birth_start="2008", birth_end="2008", seed=7)
+        >>> all(d.year == 2008 for d in df["birthday"])
+        True
+
+        使用 ``seed`` 保证可复现：
+
+        >>> generate(1, seed=99)["name"].iloc[0] == generate(1, seed=99)["name"].iloc[0]
+        True
     """
     if n < 1:
         raise ValueError(f"n 必须 ≥ 1，收到 {n}")
