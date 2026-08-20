@@ -9,7 +9,7 @@ Surnames are weighted by real Chinese population proportions (百家姓).
 Given names are built from 200+ curated characters (positive-meaning hanzi), split by gender.
 
 - Package name: `alt_generate_zh_name`
-- Version: 0.2.5
+- Version: 0.3.1
 - License: Apache-2.0
 - Python: ≥ 3.10
 - Dependency: pandas ≥ 2.0
